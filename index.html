@@ -93,7 +93,7 @@ const run = () => {
   const o = {
     withSuccessHandler(f) { h.s = f; return o; },
     withFailureHandler(f) { h.f = f; return o; },
-    status(test) { call(fetch(API + '?api=status' + (test ? '&test=1' : ''))); },
+    status(test, id) { call(fetch(API + '?api=status' + (test ? '&test=1' : '') + '&id=' + encodeURIComponent(id || ''))); },
     submit(id, name, grade, party, org, test) { call(fetch(API, { method: 'POST', body: JSON.stringify({ id, name, grade, party, org, test }) })); },
   };
   return o;
@@ -183,9 +183,10 @@ $('edit').onclick = () => {
 
 run().withSuccessHandler(r => {
   const d = store('mikataData');
-  if (d) return done(r, d);
+  if (d && r.mine) return done(r, d);
+  if (d) { store('mikataData', null); $('name').value = d.name; }   // 名簿から消えていたら入力画面へ（名前だけ残す）
   if (r.closed || r.full) closed(r);
-}).status(!!CFG.TEST);
+}).status(!!CFG.TEST, getId());
 </script>
 </body>
 </html>
