@@ -9,7 +9,7 @@ DTSTART:20261212T041000Z
 DTEND:20261212T073000Z
 SUMMARY:13-勉強会(総合診療医のミカタ)
 LOCATION:山口大学医学部 霜仁会館 3F 多目的ホール（山口県宇部市南小串1丁目1-1）
-DESCRIPTION:ポリクリ直前企画！医学生のための特別イベント「総合診療医のミカタ」\n2026年12月12日（土）13:10〜16:30（13:00 開場）\n山口大学医学部 霜仁会館 3F 多目的ホール\n連絡先：家庭医療べんきょう会（山口大学医学部） kateiiryoyamaguchi24+event@gmail.com
+DESCRIPTION:ポリクリ直前企画！医学生のための特別イベント「総合診療医のミカタ」\n2026年12月12日（土）13:10〜16:30（13:00 開場）\n山口大学医学部 霜仁会館 3F 多目的ホール\nお知らせ（オープンチャット「12/12 総診のミカタ」）：https://line.me/ti/g2/xHNRRvyfFif3wtkRDBPHaGwoafvm9vuGoTFEEg\n連絡先：家庭医療べんきょう会（山口大学医学部） kateiiryoyamaguchi24+event@gmail.com
 BEGIN:VALARM
 TRIGGER:-P1D
 ACTION:DISPLAY
