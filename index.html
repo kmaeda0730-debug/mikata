@@ -34,6 +34,8 @@
   .note { font-size: 14px; color: #3d4b58; }
   .chosen { background: var(--soft); border-radius: 10px; padding: 10px 12px; margin: 12px 0 18px; font-size: 15px; }
   .link { margin-top: 14px; background: none; border: 0; min-height: 0; color: var(--ai); font-size: 14px; text-decoration: underline; font-weight: 500; }
+  #s-done a:not(.btn) { color: var(--ai); font-weight: 700; }
+  #openchat { display: flex; align-items: center; justify-content: center; }
   [hidden] { display: none !important; }
 </style>
 </head>
@@ -63,15 +65,12 @@
   </section>
 
   <section id="s-done" hidden>
-    <p class="done">参加登録が完了しました</p>
-    <p class="note" id="count"></p>
+    <p class="note" id="count" style="margin:0"></p>
+    <p class="done" id="doneTitle">あと1ステップ：<br>オープンチャットへ参加</p>
+    <p class="note" id="ocNote">前日と当日朝のお知らせ・懇親会の案内は、ここだけでお届けします。名前は本名でなくてOK、終了1週間後に部屋は削除します。</p>
+    <a class="btn primary big" id="openchat" target="_blank" rel="noopener">オープンチャットに入る</a>
     <div class="chosen" id="chosen"></div>
-    <p class="q" style="margin-top:0">予定に入れておく</p>
-    <div class="stack">
-      <a class="btn" id="gcal" target="_blank" rel="noopener">Googleカレンダーに追加</a>
-      <a class="btn" id="ics" target="_blank" rel="noopener">iPhoneのカレンダーに追加</a>
-      <a class="btn primary" id="openchat" target="_blank" rel="noopener">オープンチャットに入る<br><span style="font-weight:500;font-size:13px">前日と当日朝のお知らせが届きます（終了1週間後に部屋は削除）</span></a>
-    </div>
+    <p class="note" style="margin:0">予定にも入れておく：<a id="gcal" target="_blank" rel="noopener">Googleカレンダー</a> ／ <a id="ics" target="_blank" rel="noopener">iPhoneのカレンダー</a></p>
     <button class="link" id="edit">登録内容を直す</button>
   </section>
 
@@ -133,7 +132,7 @@ function options(box, list, key) {
   });
 }
 function done(r, d) {
-  $('count').textContent = 'いま ' + r.count + ' 人が参加予定です。';
+  $('count').textContent = '登録を受け付けました（いま ' + r.count + ' 人が参加予定）';
   $('chosen').textContent = d.name + '　／　' + d.grade + '　／　懇親会：' + d.party + (d.org ? '　／　' + d.org : '');
   show('s-done');
 }
@@ -149,7 +148,8 @@ $('place').textContent = CFG.PLACE;
 $('contact').textContent = CFG.CONTACT;
 $('gcal').href = CFG.GCAL_URL;
 $('ics').href = CFG.ICS_URL;
-if (CFG.OPENCHAT_URL) $('openchat').href = CFG.OPENCHAT_URL; else $('openchat').hidden = true;
+if (CFG.OPENCHAT_URL) $('openchat').href = CFG.OPENCHAT_URL;
+else { $('openchat').hidden = $('ocNote').hidden = true; $('doneTitle').textContent = '参加登録が完了しました'; }
 options($('grades'), CFG.GRADES, 'grade');
 options($('parties'), CFG.PARTY, 'party');
 $('name').oninput = ready;
