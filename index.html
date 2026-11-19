@@ -49,9 +49,9 @@
   <div class="meta"><b>12.12（土）</b> 13:10〜16:30<br><span id="place"></span><br>申込締切 12月11日（金）23:59</div>
 
   <section id="s-join">
-    <label class="q" for="name">お名前（ひらがな）<span class="req">必須</span> <small>名札に使います</small></label>
-    <input type="text" id="name" autocomplete="name" maxlength="40" placeholder="例）やまぐち はなこ">
-    <p class="note" id="nameErr" hidden style="color:#b3261e;margin:6px 0 0">ひらがなで入力してください</p>
+    <label class="q" for="name">お名前<span class="req">必須</span> <small>名札に使います</small></label>
+    <input type="text" id="name" autocomplete="name" maxlength="40" placeholder="例）山口　花子">
+    <p class="note" id="nameErr" hidden style="color:#b3261e;margin:6px 0 0">漢字で入力してください</p>
 
     <div class="q" id="gradeLabel">学年・職種<span class="req">必須</span></div>
     <div class="grid" id="grades" role="group" aria-labelledby="gradeLabel"></div>
@@ -69,7 +69,7 @@
     <textarea id="ask" maxlength="500" placeholder="例：「ベッドサイドで何を話せばいいかわからない」など"></textarea>
 
     <button class="primary big" id="join" disabled>参加する</button>
-    <p class="note" id="hint" style="text-align:center;margin-top:8px">お名前（ひらがな）・学年・懇親会への興味を選ぶと押せます</p>
+    <p class="note" id="hint" style="text-align:center;margin-top:8px">お名前・学年・懇親会への興味を選ぶと押せます</p>
   </section>
 
   <section id="s-done" hidden>
@@ -115,15 +115,15 @@ function getId() {
   if (!/^[a-z0-9]{8,40}$/.test(id || '')) { id = Math.random().toString(36).slice(2) + Date.now().toString(36); store('mikataId', id); }
   return id;
 }
-const kana = s => s.replace(/[\u30a1-\u30f6]/g, c => String.fromCharCode(c.charCodeAt(0) - 0x60)).replace(/[\s\u3000]+/g, ' ').trim();
-const isKana = s => /^[\u3041-\u3096\u309d\u309e\u30fc\u30fb ]+$/.test(s);
+const kana = s => s.trim();   // 11-19 から名前は漢字（変換しない）
+const isKana = s => /[\u4e00-\u9fff\u3005]/.test(s);   // 漢字が1字以上（ponytail: 外国の方などで困ったら外す）
 function ready() {
   const n = kana($('name').value);
   $('nameErr').hidden = !n || isKana(n);
   const ok = isKana(n) && pick.grade && pick.party;
   $('join').disabled = !ok;
   $('hint').hidden = !!ok;
-  $('hint').textContent = 'お名前（ひらがな）・学年・懇親会への興味を選ぶと押せます';
+  $('hint').textContent = 'お名前・学年・懇親会への興味を選ぶと押せます';
 }
 function options(box, list, key) {
   list.forEach(v => {
