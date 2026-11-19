@@ -21,6 +21,8 @@
   .q small { font-weight: 500; color: #4f6275; }
   .req { color: #b3261e; font-size: 13px; margin-left: 4px; }
   input[type=text] { width: 100%; min-height: 50px; padding: 10px 12px; font: inherit; font-size: 17px; border: 1.5px solid var(--line); border-radius: 12px; background: #fff; color: var(--ink); }
+  textarea { width: 100%; min-height: 96px; padding: 10px 12px; font: inherit; font-size: 16px; border: 1.5px solid var(--line); border-radius: 12px; background: #fff; color: var(--ink); resize: vertical; }
+  textarea:focus { outline: 2px solid var(--ai); border-color: var(--ai); }
   input[type=text]:focus { outline: 2px solid var(--ai); border-color: var(--ai); }
   .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
   button, .btn { display: block; width: 100%; min-height: 50px; padding: 10px; font: inherit; font-weight: 700; font-size: 15px; color: var(--ink); background: #fff; border: 1.5px solid var(--line); border-radius: 12px; text-align: center; text-decoration: none; cursor: pointer; }
@@ -60,6 +62,12 @@
     <label class="q" for="org">所属 <small>山口大学以外の方のみ</small></label>
     <input type="text" id="org" autocomplete="organization" maxlength="60" placeholder="例）○○大学 医学部">
 
+    <div class="q" id="sourceLabel">このイベントを何で知りましたか <small>任意</small></div>
+    <div class="grid" id="sources" role="group" aria-labelledby="sourceLabel"></div>
+
+    <label class="q" for="ask">講師に聞いてみたいこと、病棟で感じたモヤモヤ <small>任意</small></label>
+    <textarea id="ask" maxlength="500" placeholder="例：「ベッドサイドで何を話せばいいかわからない」など"></textarea>
+
     <button class="primary big" id="join" disabled>参加する</button>
     <p class="note" id="hint" style="text-align:center;margin-top:8px">お名前（ひらがな）・学年・懇親会への興味を選ぶと押せます</p>
   </section>
@@ -84,7 +92,7 @@
 
 <script>
 const API = 'https://script.google.com/macros/s/AKfycbyPoOEa-2ok_soSNXKF0Fl9O4cxSijzdRgpxNSJTPGyvmD2G_BXWz3gGxAli8boOgP9RQ/exec';
-const CFG = Object.assign({"TITLE": "総合診療医のミカタ", "KICKER": "ポリクリ直前企画！医学生のための特別イベント", "PLACE": "山口大学医学部 霜仁会館 3F 多目的ホール", "CONTACT": "家庭医療べんきょう会（山口大学医学部） kateiiryoyamaguchi24+event@gmail.com", "OPENCHAT_URL": "https://line.me/ti/g2/xHNRRvyfFif3wtkRDBPHaGwoafvm9vuGoTFEEg", "GCAL_URL": "https://calendar.google.com/calendar/render?action=TEMPLATE&text=13-%E5%8B%89%E5%BC%B7%E4%BC%9A%28%E7%B7%8F%E5%90%88%E8%A8%BA%E7%99%82%E5%8C%BB%E3%81%AE%E3%83%9F%E3%82%AB%E3%82%BF%29&dates=20261212T041000Z%2F20261212T073000Z&location=%E5%B1%B1%E5%8F%A3%E5%A4%A7%E5%AD%A6%E5%8C%BB%E5%AD%A6%E9%83%A8%20%E9%9C%9C%E4%BB%81%E4%BC%9A%E9%A4%A8%203F%20%E5%A4%9A%E7%9B%AE%E7%9A%84%E3%83%9B%E3%83%BC%E3%83%AB%EF%BC%88%E5%B1%B1%E5%8F%A3%E7%9C%8C%E5%AE%87%E9%83%A8%E5%B8%82%E5%8D%97%E5%B0%8F%E4%B8%B21%E4%B8%81%E7%9B%AE1-1%EF%BC%89&details=%E3%83%9D%E3%83%AA%E3%82%AF%E3%83%AA%E7%9B%B4%E5%89%8D%E4%BC%81%E7%94%BB%EF%BC%81%E5%8C%BB%E5%AD%A6%E7%94%9F%E3%81%AE%E3%81%9F%E3%82%81%E3%81%AE%E7%89%B9%E5%88%A5%E3%82%A4%E3%83%99%E3%83%B3%E3%83%88%E3%80%8C%E7%B7%8F%E5%90%88%E8%A8%BA%E7%99%82%E5%8C%BB%E3%81%AE%E3%83%9F%E3%82%AB%E3%82%BF%E3%80%8D%0A2026%E5%B9%B412%E6%9C%8812%E6%97%A5%EF%BC%88%E5%9C%9F%EF%BC%8913%3A10%E3%80%9C16%3A30%EF%BC%8813%3A00%20%E9%96%8B%E5%A0%B4%EF%BC%89%0A%E5%B1%B1%E5%8F%A3%E5%A4%A7%E5%AD%A6%E5%8C%BB%E5%AD%A6%E9%83%A8%20%E9%9C%9C%E4%BB%81%E4%BC%9A%E9%A4%A8%203F%20%E5%A4%9A%E7%9B%AE%E7%9A%84%E3%83%9B%E3%83%BC%E3%83%AB%0A%E3%81%8A%E7%9F%A5%E3%82%89%E3%81%9B%EF%BC%88%E3%82%AA%E3%83%BC%E3%83%97%E3%83%B3%E3%83%81%E3%83%A3%E3%83%83%E3%83%88%E3%80%8C12%2F12%20%E7%B7%8F%E8%A8%BA%E3%81%AE%E3%83%9F%E3%82%AB%E3%82%BF%E3%80%8D%EF%BC%89%EF%BC%9Ahttps%3A%2F%2Fline.me%2Fti%2Fg2%2FxHNRRvyfFif3wtkRDBPHaGwoafvm9vuGoTFEEg%0A%E9%80%A3%E7%B5%A1%E5%85%88%EF%BC%9A%E5%AE%B6%E5%BA%AD%E5%8C%BB%E7%99%82%E3%81%B9%E3%82%93%E3%81%8D%E3%82%87%E3%81%86%E4%BC%9A%EF%BC%88%E5%B1%B1%E5%8F%A3%E5%A4%A7%E5%AD%A6%E5%8C%BB%E5%AD%A6%E9%83%A8%EF%BC%89%20kateiiryoyamaguchi24%2Bevent%40gmail.com&ctz=Asia%2FTokyo", "ICS_URL": "mikata.ics", "GRADES": ["医学部 1〜2年生", "医学部 3年生", "医学部 4年生", "医学部 5年生", "医学部 6年生", "研修医", "専攻医・医師", "その他"], "PARTY": ["興味あり", "興味なし"]}, { TEST: new URLSearchParams(location.search).get('test') === '1' });
+const CFG = Object.assign({"TITLE": "総合診療医のミカタ", "KICKER": "ポリクリ直前企画！医学生のための特別イベント", "PLACE": "山口大学医学部 霜仁会館 3F 多目的ホール", "CONTACT": "家庭医療べんきょう会（山口大学医学部） kateiiryoyamaguchi24+event@gmail.com", "OPENCHAT_URL": "https://line.me/ti/g2/xHNRRvyfFif3wtkRDBPHaGwoafvm9vuGoTFEEg", "GCAL_URL": "https://calendar.google.com/calendar/render?action=TEMPLATE&text=13-%E5%8B%89%E5%BC%B7%E4%BC%9A%28%E7%B7%8F%E5%90%88%E8%A8%BA%E7%99%82%E5%8C%BB%E3%81%AE%E3%83%9F%E3%82%AB%E3%82%BF%29&dates=20261212T041000Z%2F20261212T073000Z&location=%E5%B1%B1%E5%8F%A3%E5%A4%A7%E5%AD%A6%E5%8C%BB%E5%AD%A6%E9%83%A8%20%E9%9C%9C%E4%BB%81%E4%BC%9A%E9%A4%A8%203F%20%E5%A4%9A%E7%9B%AE%E7%9A%84%E3%83%9B%E3%83%BC%E3%83%AB%EF%BC%88%E5%B1%B1%E5%8F%A3%E7%9C%8C%E5%AE%87%E9%83%A8%E5%B8%82%E5%8D%97%E5%B0%8F%E4%B8%B21%E4%B8%81%E7%9B%AE1-1%EF%BC%89&details=%E3%83%9D%E3%83%AA%E3%82%AF%E3%83%AA%E7%9B%B4%E5%89%8D%E4%BC%81%E7%94%BB%EF%BC%81%E5%8C%BB%E5%AD%A6%E7%94%9F%E3%81%AE%E3%81%9F%E3%82%81%E3%81%AE%E7%89%B9%E5%88%A5%E3%82%A4%E3%83%99%E3%83%B3%E3%83%88%E3%80%8C%E7%B7%8F%E5%90%88%E8%A8%BA%E7%99%82%E5%8C%BB%E3%81%AE%E3%83%9F%E3%82%AB%E3%82%BF%E3%80%8D%0A2026%E5%B9%B412%E6%9C%8812%E6%97%A5%EF%BC%88%E5%9C%9F%EF%BC%8913%3A10%E3%80%9C16%3A30%EF%BC%8813%3A00%20%E9%96%8B%E5%A0%B4%EF%BC%89%0A%E5%B1%B1%E5%8F%A3%E5%A4%A7%E5%AD%A6%E5%8C%BB%E5%AD%A6%E9%83%A8%20%E9%9C%9C%E4%BB%81%E4%BC%9A%E9%A4%A8%203F%20%E5%A4%9A%E7%9B%AE%E7%9A%84%E3%83%9B%E3%83%BC%E3%83%AB%0A%E3%81%8A%E7%9F%A5%E3%82%89%E3%81%9B%EF%BC%88%E3%82%AA%E3%83%BC%E3%83%97%E3%83%B3%E3%83%81%E3%83%A3%E3%83%83%E3%83%88%E3%80%8C12%2F12%20%E7%B7%8F%E8%A8%BA%E3%81%AE%E3%83%9F%E3%82%AB%E3%82%BF%E3%80%8D%EF%BC%89%EF%BC%9Ahttps%3A%2F%2Fline.me%2Fti%2Fg2%2FxHNRRvyfFif3wtkRDBPHaGwoafvm9vuGoTFEEg%0A%E9%80%A3%E7%B5%A1%E5%85%88%EF%BC%9A%E5%AE%B6%E5%BA%AD%E5%8C%BB%E7%99%82%E3%81%B9%E3%82%93%E3%81%8D%E3%82%87%E3%81%86%E4%BC%9A%EF%BC%88%E5%B1%B1%E5%8F%A3%E5%A4%A7%E5%AD%A6%E5%8C%BB%E5%AD%A6%E9%83%A8%EF%BC%89%20kateiiryoyamaguchi24%2Bevent%40gmail.com&ctz=Asia%2FTokyo", "ICS_URL": "mikata.ics", "GRADES": ["医学部 1〜2年生", "医学部 3年生", "医学部 4年生", "医学部 5年生", "医学部 6年生", "研修医", "専攻医", "医師", "その他の医療従事者", "その他"], "PARTY": ["興味あり", "興味なし"], "SOURCE": ["ポスター・チラシ", "SNS", "友人・先輩の紹介", "大学・部活動の案内", "その他"]}, { TEST: new URLSearchParams(location.search).get('test') === '1' });
 // Googleの名簿へ送る（画面はGitHub Pages、記録はGoogle）
 const run = () => {
   const h = {};
@@ -93,13 +101,13 @@ const run = () => {
     withSuccessHandler(f) { h.s = f; return o; },
     withFailureHandler(f) { h.f = f; return o; },
     status(test, id) { call(fetch(API + '?api=status' + (test ? '&test=1' : '') + '&id=' + encodeURIComponent(id || ''))); },
-    submit(id, name, grade, party, org, test) { call(fetch(API, { method: 'POST', body: JSON.stringify({ id, name, grade, party, org, test }) })); },
+    submit(id, name, grade, party, org, test, source, ask) { call(fetch(API, { method: 'POST', body: JSON.stringify({ id, name, grade, party, org, test, source, ask }) })); },
   };
   return o;
 };
 const $ = id => document.getElementById(id);
 const show = id => ['s-join', 's-done', 's-closed'].forEach(s => $(s).hidden = s !== id);
-const pick = { grade: '', party: '' };
+const pick = { grade: '', party: '', source: '' };
 
 function store(k, v) { if (CFG.TEST) k += '-test'; try { if (v === undefined) return JSON.parse(localStorage.getItem(k) || 'null'); localStorage.setItem(k, JSON.stringify(v)); } catch (e) { return null; } }
 function getId() {
@@ -120,12 +128,12 @@ function ready() {
 function options(box, list, key) {
   list.forEach(v => {
     const b = document.createElement('button');
-    b.className = 'opt' + (v === 'その他' ? ' wide' : '');
+    b.className = 'opt' + (v === 'その他' && list.length % 2 ? ' wide' : '');   // 奇数個のときだけ「その他」を横いっぱいに
     b.textContent = v;
     b.setAttribute('aria-pressed', 'false');
     b.onclick = () => {
-      pick[key] = v;
-      box.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+      pick[key] = (key === 'source' && pick[key] === v) ? '' : v;   // 任意の項目はもう一度押すと外せる
+      box.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x.textContent === pick[key])));
       ready();
     };
     box.appendChild(b);
@@ -152,11 +160,12 @@ if (CFG.OPENCHAT_URL) $('openchat').href = CFG.OPENCHAT_URL;
 else { $('openchat').hidden = $('ocNote').hidden = true; $('doneTitle').textContent = '参加登録が完了しました'; }
 options($('grades'), CFG.GRADES, 'grade');
 options($('parties'), CFG.PARTY, 'party');
+options($('sources'), CFG.SOURCE, 'source');
 $('name').oninput = ready;
 $('name').onblur = () => { const n = kana($('name').value); if (isKana(n)) $('name').value = n; ready(); };
 
 $('join').onclick = () => {
-  const d = { name: kana($('name').value), grade: pick.grade, party: pick.party, org: $('org').value.trim() };
+  const d = { name: kana($('name').value), grade: pick.grade, party: pick.party, org: $('org').value.trim(), source: pick.source, ask: $('ask').value.trim() };
   const b = $('join');
   b.disabled = true; b.textContent = '送信中…';
   run().withSuccessHandler(r => {
@@ -167,15 +176,15 @@ $('join').onclick = () => {
   }).withFailureHandler(() => {
     b.textContent = '参加する'; ready();
     alert('送れませんでした。通信状態を確かめて、もう一度押してください。');
-  }).submit(getId(), d.name, d.grade, d.party, d.org, !!CFG.TEST);
+  }).submit(getId(), d.name, d.grade, d.party, d.org, !!CFG.TEST, d.source, d.ask);
 };
 $('edit').onclick = () => {
   const d = store('mikataData');
   if (d) {
-    $('name').value = d.name; $('org').value = d.org || '';
-    [['grades', d.grade, 'grade'], ['parties', d.party, 'party']].forEach(([box, v, k]) => {
-      pick[k] = v;
-      $(box).querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x.textContent === v)));
+    $('name').value = d.name; $('org').value = d.org || ''; $('ask').value = d.ask || '';
+    [['grades', d.grade, 'grade', CFG.GRADES], ['parties', d.party, 'party', CFG.PARTY], ['sources', d.source, 'source', CFG.SOURCE]].forEach(([box, v, k, list]) => {
+      pick[k] = list.indexOf(v) >= 0 ? v : '';   // 選択肢が変わった古い値は選び直してもらう
+      $(box).querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x.textContent === pick[k])));
     });
   }
   ready(); show('s-join');
