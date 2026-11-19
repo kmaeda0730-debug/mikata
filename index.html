@@ -70,6 +70,7 @@
 
     <button class="primary big" id="join" disabled>参加する</button>
     <p class="note" id="hint" style="text-align:center;margin-top:8px">お名前・学年・懇親会への興味を選ぶと押せます</p>
+    <p class="note" style="text-align:center;margin-top:14px">予定にも入れておく：<a href="https://timetreeapp.com/public_calendars/kateiiryo_yamaguchi/events/3102887668814087075" target="_blank" rel="noopener">TimeTree</a> ／ <a id="gcal2" target="_blank" rel="noopener">Googleカレンダー</a> ／ <a id="ics2" target="_blank" rel="noopener">iPhoneのカレンダー</a></p>
   </section>
 
   <section id="s-done" hidden>
@@ -157,6 +158,8 @@ $('contact').textContent = CFG.CONTACT_URL ? 'Instagram @katei_iryou_yamaguchi' 
 if (CFG.CONTACT_URL) { $('contact').href = CFG.CONTACT_URL; $('contactTail').textContent = ' のDMへ'; }
 $('gcal').href = CFG.GCAL_URL;
 $('ics').href = CFG.ICS_URL;
+$('gcal2').href = CFG.GCAL_URL;
+$('ics2').href = CFG.ICS_URL;
 if (CFG.OPENCHAT_URL) $('openchat').href = CFG.OPENCHAT_URL;
 else { $('openchat').hidden = $('ocNote').hidden = true; $('doneTitle').textContent = '参加登録が完了しました'; }
 options($('grades'), CFG.GRADES, 'grade');
