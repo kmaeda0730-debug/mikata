@@ -4,12 +4,12 @@ PRODID:-//mikata//JP
 METHOD:PUBLISH
 BEGIN:VEVENT
 UID:mikata-20261212@kateiiryo
-DTSTAMP:20261119T024722Z
+DTSTAMP:20261119T040620Z
 DTSTART:20261212T041000Z
 DTEND:20261212T073000Z
 SUMMARY:13-勉強会(総合診療医のミカタ)
 LOCATION:山口大学医学部 霜仁会館 3F 多目的ホール（山口県宇部市南小串1丁目1-1）
-DESCRIPTION:ポリクリ直前企画！医学生のための特別イベント「総合診療医のミカタ」\n2026年12月12日（土）13:10〜16:30（13:00 開場）\n山口大学医学部 霜仁会館 3F 多目的ホール\nお知らせ（オープンチャット「12/12 総診のミカタ」）：https://line.me/ti/g2/xHNRRvyfFif3wtkRDBPHaGwoafvm9vuGoTFEEg\nお問い合わせ：Instagram @katei_iryou_yamaguchi のDMへ\nhttps://www.instagram.com/katei_iryou_yamaguchi/
+DESCRIPTION:医学生のための特別イベント「総合診療医のミカタ」\n2026年12月12日（土）13:10〜16:30（13:00 開場）\n山口大学医学部 霜仁会館 3F 多目的ホール\nお知らせ（オープンチャット「12/12 総診のミカタ」）：https://line.me/ti/g2/xHNRRvyfFif3wtkRDBPHaGwoafvm9vuGoTFEEg\nお問い合わせ：Instagram @katei_iryou_yamaguchi のDMへ\nhttps://www.instagram.com/katei_iryou_yamaguchi/
 BEGIN:VALARM
 TRIGGER:-P1D
 ACTION:DISPLAY
